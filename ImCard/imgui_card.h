@@ -43,7 +43,7 @@ namespace ImGui
 	/// <param name="color - Background color"></param>
 	/// <param name="rounding - Background ñorners rounding scale"></param>
 	IMGUI_CARD_CALL BeginCard(const std::string& header, const ImCardStyle* params = nullptr, bool collapsible = false) -> void;
-	IMGUI_CARD_CALL BeginCardEx(const std::string& header, const ImCardStyle* params = nullptr, ImCardFlags flags = ImCardFlags::none, void* function = nullptr) -> void;
+	IMGUI_CARD_CALL BeginCardEx(const std::string& header, const ImCardStyle* params = nullptr, ImCardFlags flags = ImCardFlags::none) -> void;
 
 	/// <summary>
 	/// Closes the stack of card view interface elements

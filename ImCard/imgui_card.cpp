@@ -174,7 +174,7 @@ IMGUI_CARD_CALL get_card(ImGuiID id) -> std::shared_ptr<ImCard>
 
 IMGUI_CARD_CALL ImGui::BeginCard(const std::string& header, const ImCardStyle* params, bool collapsible) -> void { BeginCardEx(header, params, collapsible ? ImCardFlags::collapsible : ImCardFlags::none, nullptr); }
 
-IMGUI_CARD_CALL ImGui::BeginCardEx(const std::string& header, const ImCardStyle* params, ImCardFlags flags, void* function) -> void
+IMGUI_CARD_CALL ImGui::BeginCardEx(const std::string& header, const ImCardStyle* params, ImCardFlags flags) -> void
 {
 	auto window = GetCurrentWindow();
 	if (window->SkipItems)
