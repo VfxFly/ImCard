@@ -1,4 +1,4 @@
-ImCard - simple auto-expandable card-view implementation with Dead ImGui
+ImCard - simple auto-expandable card-view implementation with Dear ImGui
 =====
 
 ### Requirements:
@@ -9,6 +9,7 @@ ImCard - simple auto-expandable card-view implementation with Dead ImGui
  - No objects (classes/structs), only inline direct call.
  - Auto-expandable group/background.
  - Changable color & rounding scale.
+ - Card style customization.
 
 ### Usage:
 **Use BeginCard()/EndCard() functions for group your widgets in cart-view**
