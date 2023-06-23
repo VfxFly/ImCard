@@ -73,8 +73,8 @@ int main(int, char**)
         
 #ifdef _H__UI_H
         ImGui::SetNextWindowPos(ImVec2(60.0f, 0.0f));
-        ImGui::SetNextWindowSize(ImVec2(360.f * dpi.x, height));
-        UI::DrawUI(ImVec2(340.f * dpi.x, 32.f * dpi.y), dpi);
+        ImGui::SetNextWindowSize(ImVec2(540.f * dpi.x, height));
+        UI::DrawUI(ImVec2((540.f - ImGui::GetStyle().WindowPadding.x * 2.0f) * dpi.x, 32.f * dpi.y), dpi);
 #endif
 
         ImGui::Render();

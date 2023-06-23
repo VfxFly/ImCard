@@ -2,14 +2,14 @@
 
 #include <string_view>
 #include <imgui_card.h>
+#include <imgui_internal.h>
 
-
-static ImCardStyle card_style;
+static ImCardStyle card_style{};
 void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 {
 	ImGui::Begin("Test UI", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	{
-		if (ImGui::CollapsingHeader("Card Style"))
+		ImGui::BeginCard("Card Style", &card_style, true);
 		{
 			ImGui::ColorEdit4("Color", (float*)&card_style.color);
 
@@ -29,10 +29,12 @@ void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 
 			ImGui::BeginDisabled(card_style.accent);
 			ImGui::DragFloat("Rounding", &card_style.rounding, 0.1f, 0.0f);
+			ImGui::DragFloat("Collapsing Delta", &card_style.collapsing_delta, 0.01f, 0.01f, 0.5f);
 			ImGui::EndDisabled();
 		}
+		ImGui::EndCard();
 
-		ImGui::BeginCard("Card Header", &card_style);
+		ImGui::BeginCard("Card", &card_style);
 		{
 			ImGui::Button("Button", { size.x - ImGui::GetStyle().WindowPadding.x * 2.0f, size.y });
 			static bool check_box = false;
@@ -46,12 +48,11 @@ void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 		}
 		ImGui::EndCard();
 
-		ImGui::BeginCard("Second Card Header", &card_style);
+		ImGui::BeginCard("Collapsible Card", &card_style, true);
 		{
 			ImGui::Button("Button", { size.x - ImGui::GetStyle().WindowPadding.x * 2.0f, size.y });
 			static float slider = 0.0f;
-			ImGui::PushItemWidth(size.x - ImGui::GetStyle().WindowPadding.x * 2.0f - ImGui::CalcTextSize("Slider").x);
-			ImGui::SliderFloat("Slider", &slider, 0.0f, 100.0f, "%.2f");
+			ImGui::SliderFloat("Slider", &slider, -10.0f, 10.0f);
 		}
 		ImGui::EndCard();
 	}
