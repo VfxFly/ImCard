@@ -16,7 +16,7 @@ ImCard - simple auto-expandable card-view implementation with Dear ImGui
 
 Code:
 ```
-BeginCard("My Card View");
+BeginCard("My Card");
   // your widgets
 EndCard();
 ```
@@ -24,10 +24,27 @@ EndCard();
 ### How to change background and rounding scale?
 Code:
 ```
+static card_style{};
 ImColor color = ImColor(255, 255, 255, 255);
 float rounding = 15.0f;
+card_style.color = color;
+card_style.rounding = rounding;
 ---
-BeginCard("My Card View", color, rounding);
+BeginCard("My Styled Card", &card_style);
+  // your widgets
+EndCard();
+```
+
+### How to use flags and create collapsible card?
+Code:
+```
+BeginCard("My Collapsible Card", nullptr, true);
+  // your widgets
+EndCard();
+```
+or
+```
+BeginCardEx("My Collapsible Card", nullptr, ImCardFlag::collpasible);
   // your widgets
 EndCard();
 ```
