@@ -172,7 +172,7 @@ IMGUI_CARD_CALL get_card(ImGuiID id) -> std::shared_ptr<ImCard>
 	return g_card;
 }
 
-IMGUI_CARD_CALL ImGui::BeginCard(const std::string& header, const ImCardStyle* params, bool collapsible) -> void { BeginCardEx(header, params, collapsible ? ImCardFlags::collapsible : ImCardFlags::none, nullptr); }
+IMGUI_CARD_CALL ImGui::BeginCard(const std::string& header, const ImCardStyle* params, bool collapsible) -> void { BeginCardEx(header, params, collapsible ? ImCardFlags::collapsible : ImCardFlags::none); }
 
 IMGUI_CARD_CALL ImGui::BeginCardEx(const std::string& header, const ImCardStyle* params, ImCardFlags flags) -> void
 {
