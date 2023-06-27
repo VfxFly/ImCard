@@ -40,7 +40,7 @@ void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 			static bool check_box = false;
 			ImGui::Checkbox("Check Box", &check_box);
 			static char buffer[1024] = "Type a text or remove this...";
-			ImGui::PushItemWidth(size.x - ImGui::GetStyle().WindowPadding.x * 2.0f);
+			ImGui::PushItemWidth(size.x - ImGui::GetStyle().WindowPadding.x * 3.0f);
 			ImGui::InputTextMultiline("##input_text_multiline", buffer, 1024);
 			ImGui::PopItemWidth();
 			if (!std::string_view(buffer).empty())
