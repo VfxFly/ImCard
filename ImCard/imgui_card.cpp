@@ -33,6 +33,84 @@ std::vector<std::shared_ptr<ImCard>> g_imCards;
 std::shared_ptr<ImCard> g_card;
 
 #pragma region _private
+IMGUI_CARD_CALL AddRectFilledMultiColor(ImDrawList* draw_list, const ImVec2& p_min, const ImVec2& p_max, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left, float rounding, ImDrawFlags flags)
+{
+	if (((col_upr_left | col_upr_right | col_bot_right | col_bot_left) & IM_COL32_A_MASK) == 0)
+		return;
+
+	if (flags == ~0)
+		flags = ImDrawFlags_RoundCornersAll;
+	if (flags >= 0x01 && flags <= 0x0F)
+		flags = (flags << 4);
+
+	if ((flags & ImDrawFlags_RoundCornersMask_) == 0)
+		flags |= ImDrawFlags_RoundCornersAll;
+
+	rounding = ImMin(rounding, ImFabs(p_max.x - p_min.x) * (((flags & ImDrawCornerFlags_Top) == ImDrawCornerFlags_Top) || ((flags & ImDrawCornerFlags_Bot) == ImDrawCornerFlags_Bot) ? 0.5f : 1.0f) - 1.0f);
+	rounding = ImMin(rounding, ImFabs(p_max.y - p_min.y) * (((flags & ImDrawCornerFlags_Left) == ImDrawCornerFlags_Left) || ((flags & ImDrawCornerFlags_Right) == ImDrawCornerFlags_Right) ? 0.5f : 1.0f) - 1.0f);
+
+	if (rounding > 0.0f)
+	{
+		const int size_before = draw_list->VtxBuffer.Size;
+		draw_list->AddRectFilled(p_min, p_max, IM_COL32_WHITE, rounding, flags);
+		const int size_after = draw_list->VtxBuffer.Size;
+
+		for (int i = size_before; i < size_after; i++)
+		{
+			ImDrawVert* vert = draw_list->VtxBuffer.Data + i;
+
+			ImVec4 upr_left = ImGui::ColorConvertU32ToFloat4(col_upr_left);
+			ImVec4 bot_left = ImGui::ColorConvertU32ToFloat4(col_bot_left);
+			ImVec4 up_right = ImGui::ColorConvertU32ToFloat4(col_upr_right);
+			ImVec4 bot_right = ImGui::ColorConvertU32ToFloat4(col_bot_right);
+
+			float X = ImClamp((vert->pos.x - p_min.x) / (p_max.x - p_min.x), 0.0f, 1.0f);
+
+			// 4 colors - 8 deltas
+
+			float r1 = upr_left.x + (up_right.x - upr_left.x) * X;
+			float r2 = bot_left.x + (bot_right.x - bot_left.x) * X;
+
+			float g1 = upr_left.y + (up_right.y - upr_left.y) * X;
+			float g2 = bot_left.y + (bot_right.y - bot_left.y) * X;
+
+			float b1 = upr_left.z + (up_right.z - upr_left.z) * X;
+			float b2 = bot_left.z + (bot_right.z - bot_left.z) * X;
+
+			float a1 = upr_left.w + (up_right.w - upr_left.w) * X;
+			float a2 = bot_left.w + (bot_right.w - bot_left.w) * X;
+
+
+			float Y = ImClamp((vert->pos.y - p_min.y) / (p_max.y - p_min.y), 0.0f, 1.0f);
+			float r = r1 + (r2 - r1) * Y;
+			float g = g1 + (g2 - g1) * Y;
+			float b = b1 + (b2 - b1) * Y;
+			float a = a1 + (a2 - a1) * Y;
+			ImVec4 RGBA(r, g, b, a);
+
+			RGBA = RGBA * ImGui::ColorConvertU32ToFloat4(vert->col);
+
+			vert->col = ImColor(RGBA);
+		}
+		return;
+	}
+
+	const ImVec2 uv = draw_list->_Data->TexUvWhitePixel;
+	draw_list->PrimReserve(6, 4);
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx));
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx + 1));
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx + 2));
+
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx));
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx + 2));
+	draw_list->PrimWriteIdx((ImDrawIdx)(draw_list->_VtxCurrentIdx + 3));
+
+	draw_list->PrimWriteVtx(p_min, uv, col_upr_left);
+	draw_list->PrimWriteVtx(ImVec2(p_max.x, p_min.y), uv, col_upr_right);
+	draw_list->PrimWriteVtx(p_max, uv, col_bot_right);
+	draw_list->PrimWriteVtx(ImVec2(p_min.x, p_max.y), uv, col_bot_left);
+}
+
 IMGUI_CARD_CALL ImGui::_private::BeginGridEx(const char* name, ImGuiID id, const ImVec2& size_arg, const ImCardStyle* params) -> bool
 {
 	ImGuiContext& g = *GImGui;
@@ -73,7 +151,7 @@ IMGUI_CARD_CALL ImGui::_private::BeginGridEx(const char* name, ImGuiID id, const
 
 	if (params && params->accent) {
 		const ImU32 accent_color = GetColorU32(ImVec4(params && params->accent ? params->accent_color : ImColor(ImGuiCol_ChildBg)));
-		child_window->DrawList->AddRectFilledMultiColor(child_window->Pos, child_window->Pos + size, accent_color, main_color, main_color, main_color);
+		AddRectFilledMultiColor(child_window->DrawList, child_window->Pos, child_window->Pos + size, accent_color, main_color, main_color, main_color, params ? params->rounding : 0.0f, NULL);
 	}
 	if (params && !params->accent)
 		child_window->DrawList->AddRectFilled(child_window->Pos, child_window->Pos + size, main_color, params ? params->rounding : 0.0f);

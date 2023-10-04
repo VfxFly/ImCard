@@ -40,8 +40,8 @@ namespace ImGui
 	/// Opens the stack auto-expandable card view with changeable background color. Used as Begin()/End()
 	/// </summary>
 	/// <param name="header - Card name and text in upper field"></param>
-	/// <param name="color - Background color"></param>
-	/// <param name="rounding - Background ñorners rounding scale"></param>
+	/// <param name="params - Style settings for card and flags for card content grid"></param>
+	/// <param name="collapsible - Set flag and allows hide the contents of the card"></param>
 	IMGUI_CARD_CALL BeginCard(const std::string& header, const ImCardStyle* params = nullptr, bool collapsible = false) -> void;
 	IMGUI_CARD_CALL BeginCardEx(const std::string& header, const ImCardStyle* params = nullptr, ImCardFlags flags = ImCardFlags::none) -> void;
 

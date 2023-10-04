@@ -26,10 +26,8 @@ void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 			ImGui::DragFloat("Thickness", &card_style.thickness, 0.1f, 0.0f);
 			ImGui::EndDisabled();
 
-			ImGui::BeginDisabled(card_style.accent);
 			ImGui::DragFloat("Rounding", &card_style.rounding, 0.1f, 0.0f);
 			ImGui::DragFloat("Collapsing Delta", &card_style.collapsing_delta, 0.01f, 0.01f, 0.5f);
-			ImGui::EndDisabled();
 		}
 		ImGui::EndCard();
 
