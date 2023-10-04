@@ -14,8 +14,7 @@ void UI::DrawUI(const ImVec2& size, const ImVec2& dpi)
 			ImGui::ColorEdit4("Color", (float*)&card_style.color);
 
 			static bool use_accent = false;
-			if (ImGui::Checkbox("Use accent", &card_style.accent))
-				card_style.rounding = 0.0f;
+			ImGui::Checkbox("Use accent", &card_style.accent);
 
 			ImGui::BeginDisabled(!card_style.accent);
 			ImGui::ColorEdit4("Accent Color", (float*)&card_style.accent_color);
