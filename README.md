@@ -24,7 +24,7 @@ EndCard();
 ### How to change background and rounding scale?
 Code:
 ```
-static card_style{};
+static ImCardStyle card_style{};
 ImColor color = ImColor(255, 255, 255, 255);
 float rounding = 15.0f;
 card_style.color = color;
